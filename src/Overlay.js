@@ -1,6 +1,6 @@
 /* 0.0.1 */
 
-(function () {
+window.initOverlay = function () {
   'use strict';
 
   // --- CONFIGURACIÓN INICIAL ---

@@ -2,7 +2,7 @@
 
 
 ( function () {
-  const test015 = 'Overlat is loaded';
+  window.test015 = 'Overlat is loaded';
   'use strict';
 
   // --- CONFIGURACIÓN INICIAL ---

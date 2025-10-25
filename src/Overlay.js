@@ -15,13 +15,14 @@
 
   // --- CREACIÓN DEL OVERLAY --
   const overlay = document.createElement('canvas');
-  overlay.id = 'wplace-overlay';
+  overlay.id = 'cc-wplace-overlay';
   overlay.style.position = 'absolute';
   overlay.style.top = '0';
   overlay.style.left = '0';
-  overlay.style.zIndex = '9999';
+  overlay.style.zIndex = '8000';
   overlay.style.pointerEvents = 'none';
-  overlay.classList.add('wplace-overlay');
+  overlay.style.borderRadius = '3px';
+  overlay.classList.add('ccwplace-overlay');
   overlay.width = window.innerWidth;
   overlay.height = window.innerHeight;
 

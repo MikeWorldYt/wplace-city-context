@@ -29,6 +29,33 @@
   document.body.appendChild(overlay);
   const ctx = overlay.getContext('2d');
 
+  // --- CREACION PANEL DASHBOARD ---
+  const panel = document.createElement('div');
+  panel.id = 'cc-wplace-panel';
+  panel.innerHTML = `
+    <style>
+      #cc-wplace-panel {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        font-family: sans-serif;
+        z-index: 10000;
+      }
+      #cc-wplace-panel input, #cc-wplace-panel button {
+        margin-top: 5px;
+        width: 100%;
+      }
+    </style>
+    <div><b>Wplace City Context</b></div>
+    <input type="text" id="credential" placeholder="Enter credential" />
+    <button id="run">RUN</button>
+  `;
+  document.body.appendChild(panel);
+
   // --- DIBUJAR CUADRÍCULA ---
   function drawGrid() {
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';

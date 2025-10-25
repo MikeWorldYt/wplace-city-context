@@ -1,5 +1,7 @@
 /* 0.0.1 */
 
+const test015 = 'Overlat is loaded';
+
 window.initOverlay = function () {
   'use strict';
 

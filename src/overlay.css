@@ -1,0 +1,27 @@
+
+#wplace-overlay,
+.wplace-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+#wplace-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-family: sans-serif;
+  z-index: 10000;
+}
+
+#wplace-panel input,
+#wplace-panel button {
+  margin-top: 5px;
+  width: 100%;
+}

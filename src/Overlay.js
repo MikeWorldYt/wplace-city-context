@@ -102,4 +102,4 @@ window.initOverlay = function () {
 
   // --- AUTOEJECUCIÓN INICIAL ---
   drawGrid();
-})();
+};

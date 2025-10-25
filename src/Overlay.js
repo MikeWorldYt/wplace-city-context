@@ -3,10 +3,24 @@
 (function () {
   'use strict';
 
-  // --- CONFIGURACIÓN ---
+  // --- CONFIGURACIÓN INICIAL ---
   const GRID_SIZE = 1000;
+//   const CACHE = {}; // simulación de cache local
+//   const MOCK_NODES = {
+//     "PuenteAlto_2": [
+//       { x: 833, y: 110, title: "Nodo A", color: "#ff0000" },
+//       { x: 850, y: 120, title: "Nodo B", color: "#00ff00" },
+//     ],
+//   };
+
+  // --- CREACIÓN DEL OVERLAY --
   const overlay = document.createElement('canvas');
   overlay.id = 'wplace-overlay';
+  overlay.style.position = 'absolute';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.zIndex = '9999';
+  overlay.style.pointerEvents = 'none';
   overlay.classList.add('wplace-overlay');
   overlay.width = window.innerWidth;
   overlay.height = window.innerHeight;

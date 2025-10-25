@@ -1,8 +1,8 @@
 /* 0.0.1 */
 
-const test015 = 'Overlat is loaded';
 
-window.initOverlay = function () {
+( function () {
+  const test015 = 'Overlat is loaded';
   'use strict';
 
   // --- CONFIGURACIÓN INICIAL ---
@@ -104,4 +104,4 @@ window.initOverlay = function () {
 
   // --- AUTOEJECUCIÓN INICIAL ---
   drawGrid();
-};
+})();

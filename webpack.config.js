@@ -15,7 +15,7 @@ const TampermonkeyHeader = `
 module.exports = {
   entry: './src/main.js',
   output: {
-    filename: 'WplaceCityContext.user.js',
+    filename: 'Webpack-CityContext.user.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

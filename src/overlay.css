@@ -26,3 +26,36 @@
   margin-top: 5px;
   width: 100%;
 }
+
+/* Panel - Credential */
+
+#cc-win-credential p {
+  position: relative;
+  margin: 5px 0 2px 0;
+  font-size: 14px;
+}
+
+#cc-wplace-panel .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#cc-wplace-panel input {
+  flex: 1;
+  padding-right: 35px;
+}
+
+#cc-wplace-panel .eye-icon {
+  position: absolute;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+#cc-wplace-panel .eye-icon:hover {
+  opacity: 1;
+}

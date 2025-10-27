@@ -1,6 +1,13 @@
 export default async function handler(req, res) {
   const BIN_ID = "68fe541aae596e708f2e4d3c";
   const MASTER_KEY = process.env.JSONBIN_MASTER_KEY;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
   try {
     const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {

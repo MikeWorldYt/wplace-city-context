@@ -16,7 +16,10 @@ export function initOverlay() {
         Send
       </button>
     </div>
-    
+    <div id="cc-win-zone">
+    </div>
+    <div id="cc-win-info-node">
+    </div>
   `;
 
   document.body.appendChild(panel);

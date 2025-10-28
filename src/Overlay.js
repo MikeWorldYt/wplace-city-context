@@ -28,6 +28,22 @@ export function initOverlay() {
     </div>
 
     <div id="cc-win-info-node">
+      <div class="cc-info-node-title">
+        <p>Title:</p>
+        <span> Nothing selected! </span>
+      </div>
+      <div class="cc-info-node-date">
+        <p>Date:</p>
+        <span> </span>
+      </div>
+      <div class="cc-info-node-comments">
+        <span> No data. </span>
+      </div>
+      <div class="cc-info-node-buttons">
+        <button id="info-node-edit-btn">Edit</button>
+        <button id="info-node-delete-btn">Delete</button>
+        <button id="info-node-close-btn">Close</button>
+      </div>
     </div>
   `;
 

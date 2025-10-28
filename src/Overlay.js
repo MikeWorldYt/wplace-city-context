@@ -16,8 +16,17 @@ export function initOverlay() {
         Send
       </button>
     </div>
+
     <div id="cc-win-zone">
+      <img src="https://raw.githubusercontent.com/MikeWorldYt/wplace-city-context/main/src/assets/location-pin.svg" 
+        alt="Location" width="20" height="20" />
+      <input type="text" id="b1" placeholder="T1 X" />
+      <input type="text" id="b2" placeholder="T1 Y" />
+      <input type="text" id="b3" placeholder="Px X" />
+      <input type="text" id="b4" placeholder="Px Y" />
+      <button id="btnAsk">Ask</button>
     </div>
+
     <div id="cc-win-info-node">
     </div>
   `;

@@ -59,3 +59,31 @@
 #cc-wplace-panel .eye-icon:hover {
   opacity: 1;
 }
+
+/* Panel -- Zone Component */
+#cc-win-zone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+#cc-win-zone input {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 40px;
+  min-width: 4ch;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff !important;
+  border-radius: 4px;
+  height: 22px;
+  font-size: 12px;
+  text-align: center;
+}
+
+#cc-win-zone input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}

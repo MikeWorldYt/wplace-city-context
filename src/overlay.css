@@ -66,7 +66,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2); 
 }
 
 #cc-win-zone input {
@@ -87,3 +88,5 @@
 #cc-win-zone input::placeholder {
   color: rgba(255, 255, 255, 0.6);
 }
+
+

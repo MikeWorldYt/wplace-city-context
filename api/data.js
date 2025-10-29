@@ -71,7 +71,7 @@ export default async function handler(req, res) {
   if (mode === 'read') {
     const tileKey = `${tlx}-${tly}`;
     const zoneKey = `${Math.floor(pxx / 250)}-${Math.floor(pxy / 250)}`;
-    console.log(data)
+    
     const data = await readData();
     if (!data || !data["620-1227"]) {
       return res.status(404).json({ success: false, message: 'Tile not found' });

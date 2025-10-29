@@ -120,6 +120,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, message: 'Invalid mode' });
   } catch (err) {
     console.error('❌ Error inesperado en handler:', err);
-    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    return res.status(500).json({ success: false, message: 'Internal Server Error', process.env.JSONBIN_MASTER_KEY });
   }
 }

@@ -69,7 +69,7 @@ export default async function handler(req, res) {
   const { mode, tlx, tly, pxx, pxy } = req.query;
 
   if (mode === 'read') {
-    const tileKey = `${tlx}-${tly}`;
+    const tileKey = `${tlx}_${tly}`;
     const zoneKey = `${Math.floor(pxx / 250)}-${Math.floor(pxy / 250)}`;
     console.log(data)
     const data = await readData();

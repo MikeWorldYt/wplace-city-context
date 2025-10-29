@@ -61,3 +61,31 @@ async function appendEntry(entry, tlx, tly) {
 }
 
 export { readData, writeData, appendEntry };
+
+
+export default async function handler(req, res) {
+  try {
+    const { tlx, tly, pxx, pxy } = req.query;
+    console.log('🔍 Params:', { tlx, tly, pxx, pxy });
+
+    // Validación básica
+    if (!tlx || !tly || !pxx || !pxy) {
+      return res.status(400).json({ error: 'Missing parameters' });
+    }
+
+    // Aquí puedes llamar a appendEntry o lo que necesites
+    const entry = {
+      px: parseInt(pxx),
+      py: parseInt(pxy),
+      title: 'Auto',
+      date: new Date().toISOString(),
+      comment: 'Generado desde API'
+    };
+
+    const result = await appendEntry(entry, tlx, tly);
+    return res.status(200).json({ success: true, result });
+  } catch (err) {
+    console.error('❌ API error:', err);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}

@@ -64,49 +64,56 @@ async function appendEntry(entry, tlx, tly) {
 
 export { readData, writeData, appendEntry };
 
+import { readData, appendEntry } from '../../data/data.js';
 
 export default async function handler(req, res) {
   const { mode, tlx, tly, pxx, pxy } = req.query;
 
-  if (mode === 'read') {
-    const tileKey = `${tlx}-${tly}`;
-    const zoneKey = `${Math.floor(pxx / 250)}-${Math.floor(pxy / 250)}`;
-    
+  const tileKey = `${tlx}-${tly}`;
+  const zoneKey = `${Math.floor(pxx / 250)}-${Math.floor(pxy / 250)}`;
+
+  try {
     const data = await readData();
-    if (!data || !data["620-1227"]) {
-      return res.status(404).json({ success: false, message: 'Tile not found' });
+
+    console.log('📦 Data completa recibida:', data);
+    console.log('🔑 Claves disponibles en data:', Object.keys(data));
+    console.log('🔍 TileKey buscado:', tileKey);
+    console.log('🔍 ZoneKey buscado:', zoneKey);
+
+    if (mode === 'read') {
+      if (!data || !data[tileKey]) {
+        return res.status(404).json({ success: false, message: 'Tile not found' });
+      }
+
+      const zone = data[tileKey][zoneKey];
+      if (!zone) {
+        return res.status(404).json({ success: false, message: 'Zone not found' });
+      }
+
+      // Si quieres devolver toda la zona:
+      return res.status(200).json({ success: true, zone });
+
+      // Si prefieres devolver solo una entrada específica:
+      // const entry = zone.find(e => e.px === parseInt(pxx) && e.py === parseInt(pxy));
+      // return res.status(200).json({ success: true, result: entry || null });
     }
 
-    // 🔍 Aquí ves toda la zona antes de filtrar
-    console.log('🔍 Zona encontrada:', data[tileKey][zoneKey]);
+    if (mode === 'write') {
+      const entry = {
+        px: parseInt(pxx),
+        py: parseInt(pxy),
+        title: 'Auto',
+        date: new Date().toISOString(),
+        comment: 'Generado desde API'
+      };
 
-    const zone = data[tileKey][zoneKey];
-    if (!zone) {
-      return res.status(404).json({ success: false, message: 'Zone not found' });
+      const result = await appendEntry(entry, tlx, tly);
+      return res.status(200).json({ success: true, result });
     }
 
-    // Si quieres devolver toda la zona:
-    return res.status(200).json({ success: true, zone });
-
-    // Si quieres filtrar por coordenadas específicas:
-    // const entry = zone.find(e => e.px === parseInt(pxx) && e.py === parseInt(pxy));
-    // return res.status(200).json({ success: true, result: entry || null });
+    return res.status(400).json({ success: false, message: 'Invalid mode' });
+  } catch (err) {
+    console.error('❌ Error en handler:', err);
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
-
-
-  if (mode === 'write') {
-    const entry = {
-      px: parseInt(pxx),
-      py: parseInt(pxy),
-      title: 'Auto',
-      date: new Date().toISOString(),
-      comment: 'Generado desde API'
-    };
-
-    const result = await appendEntry(entry, tlx, tly);
-    return res.status(200).json({ success: true, result });
-  }
-
-  return res.status(400).json({ success: false, message: 'Invalid mode' });
 }
-

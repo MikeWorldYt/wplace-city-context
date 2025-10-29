@@ -18,8 +18,10 @@ export function initOverlay() {
     </div>
 
     <div id="cc-win-zone">
-      <img src="https://raw.githubusercontent.com/MikeWorldYt/wplace-city-context/main/src/assets/location-pin.svg" 
-        alt="Location" width="20" height="20" />
+      <button id="btnLoc">
+        <img src="https://raw.githubusercontent.com/MikeWorldYt/wplace-city-context/main/src/assets/location-pin.svg" 
+          alt="Location" width="20" height="20" />
+      </button>
       <input type="text" id="b1" placeholder="T1 X" />
       <input type="text" id="b2" placeholder="T1 Y" />
       <input type="text" id="b3" placeholder="Px X" />
@@ -90,5 +92,37 @@ export function initOverlay() {
       alert('❌ Invalid credential.');
     }
   });
+
+  // Auto Location button functionality
+  document.getElementById('btnLoc')?.addEventListener('click', () => {
+    const span = document.querySelector('#bm-h');
+    if (!span) {
+      console.warn('No se encontró el span con coordenadas.');
+      return;
+    }
+    // Extract coordinates from the text
+    const text = span.textContent;
+    const match = text.match(/Tl X:\s*(\d+),\s*Tl Y:\s*(\d+),\s*Px X:\s*(\d+),\s*Px Y:\s*(\d+)/);
+    // Check if coordinates were extracted
+    if (!match) {
+      console.warn('No se pudieron extraer las coordenadas del texto.');
+      return;
+    }
+    // Extracted coordinates
+    const [_, tlx, tly, pxx, pxy] = match;
+    document.getElementById('b1').value = tlx;
+    document.getElementById('b2').value = tly;
+    document.getElementById('b3').value = pxx;
+    document.getElementById('b4').value = pxy;
+    // Local variables for global use
+    window.ccTlx = parseInt(tlx);
+    window.ccTly = parseInt(tly);
+    window.ccPxx = parseInt(pxx);
+    window.ccPxy = parseInt(pxy);
+    console.log('WCC:📍 Autolocation:', { ccTlx, ccTly, ccPxx, ccPxy });
+  });
+
+
+
 
 }

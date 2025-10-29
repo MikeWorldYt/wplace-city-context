@@ -64,7 +64,7 @@ async function appendEntry(entry, tlx, tly) {
 
 export { readData, writeData, appendEntry };
 
-import { readData, appendEntry } from '../../data/data.js';
+import { readData, appendEntry } from '../../api/data.js';
 
 export default async function handler(req, res) {
   const { mode, tlx, tly, pxx, pxy } = req.query;

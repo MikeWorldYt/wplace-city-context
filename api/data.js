@@ -55,4 +55,65 @@ async function appendEntry(entry, tlx, tly) {
   return await writeData(data);
 }
 
-export { readData, writeData, appendEntry };
+/** API HANDLER */
+export default async function handler(req, res) {
+  try {
+    const { mode, tlx, tly, pxx, pxy } = req.query;
+
+    // Validación básica
+    if (!mode || !tlx || !tly || !pxx || !pxy) {
+      console.warn('⚠️ Parámetros faltantes:', { mode, tlx, tly, pxx, pxy });
+      return res.status(400).json({ success: false, message: 'Missing parameters' });
+    }
+
+    const tileKey = `${tlx}-${tly}`;
+    const zoneKey = `${Math.floor(pxx / 250)}-${Math.floor(pxy / 250)}`;
+
+    const data = await readData();
+    if (!data || typeof data !== 'object') {
+      console.error('❌ Data inválida o vacía');
+      return res.status(500).json({ success: false, message: 'Failed to read bin data' });
+    }
+
+    console.log('📦 Data completa recibida:', data);
+    console.log('🔑 Claves disponibles:', Object.keys(data));
+    console.log('🔍 TileKey buscado:', tileKey);
+    console.log('🔍 ZoneKey buscado:', zoneKey);
+
+    if (mode === 'read') {
+      const tile = data[tileKey];
+      if (!tile) {
+        return res.status(404).json({ success: false, message: 'Tile not found' });
+      }
+
+      const zone = tile[zoneKey];
+      if (!zone) {
+        return res.status(404).json({ success: false, message: 'Zone not found' });
+      }
+
+      return res.status(200).json({ success: true, zone });
+    }
+
+    if (mode === 'write') {
+      const entry = {
+        px: parseInt(pxx),
+        py: parseInt(pxy),
+        title: 'Auto',
+        date: new Date().toISOString(),
+        comment: 'Generado desde API'
+      };
+
+      const result = await appendEntry(entry, tlx, tly);
+      if (!result) {
+        return res.status(500).json({ success: false, message: 'Failed to write entry' });
+      }
+
+      return res.status(200).json({ success: true, result });
+    }
+
+    return res.status(400).json({ success: false, message: 'Invalid mode' });
+  } catch (err) {
+    console.error('❌ Error inesperado en handler:', err);
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+}

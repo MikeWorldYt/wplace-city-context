@@ -66,16 +66,22 @@ export { readData, writeData, appendEntry };
 
 
 export default async function handler(req, res) {
-  try {
-    const { tlx, tly, pxx, pxy } = req.query;
-    console.log('🔍 Params:', { tlx, tly, pxx, pxy });
+  const { mode, tlx, tly, pxx, pxy } = req.query;
 
-    // Validación básica
-    if (!tlx || !tly || !pxx || !pxy) {
-      return res.status(400).json({ error: 'Missing parameters' });
+  if (mode === 'read') {
+    const tileKey = `${tlx}-${tly}`;
+    const zoneKey = `${Math.floor(pxx / 250)}-${Math.floor(pxy / 250)}`;
+
+    const data = await readData();
+    if (!data || !data[tileKey] || !data[tileKey][zoneKey]) {
+      return res.status(404).json({ success: false, message: 'No data found' });
     }
 
-    // Aquí puedes llamar a appendEntry o lo que necesites
+    const entry = data[tileKey][zoneKey].find(e => e.px === parseInt(pxx) && e.py === parseInt(pxy));
+    return res.status(200).json({ success: true, result: entry || null });
+  }
+
+  if (mode === 'write') {
     const entry = {
       px: parseInt(pxx),
       py: parseInt(pxy),
@@ -86,8 +92,8 @@ export default async function handler(req, res) {
 
     const result = await appendEntry(entry, tlx, tly);
     return res.status(200).json({ success: true, result });
-  } catch (err) {
-    console.error('❌ API error:', err);
-    return res.status(500).json({ error: 'Internal Server Error' });
   }
+
+  return res.status(400).json({ success: false, message: 'Invalid mode' });
 }
+

@@ -6,9 +6,7 @@ const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 async function readData() {
   try {
     const res = await fetch(`${BASE_URL}/latest`, {
-      headers: {
-        'X-Access-Key': MASTER_KEY
-      }
+      headers: { 'X-Access-Key': MASTER_KEY }
     });
     const json = await res.json();
     return json.record;
@@ -57,6 +55,9 @@ async function appendEntry(entry, tlx, tly) {
 
 /** API HANDLER */
 export default async function handler(req, res) {
+  const BIN_ID = '690183fdd0ea881f40c3ddf8';
+  const MASTER_KEY = process.env.JSONBIN_MASTER_KEY;
+  const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
   try {
     const { mode, tlx, tly, pxx, pxy } = req.query;
 

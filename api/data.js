@@ -6,20 +6,29 @@ const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 async function readData() {
   try {
     const res = await fetch(`${BASE_URL}/latest`, {
-      headers: { 'X-Access-Key': MASTER_KEY }
+      headers: {
+        'X-Access-Key': MASTER_KEY
+      }
     });
-    if (!res.ok) {
-      alert('❌ Error al leer el bin:', res.status, res.statusText);
-      return null;
-    }
+
     const json = await res.json();
-    alert('📥 Datos leídos del bin:', json.record);
-    return json.record;
+
+    return {
+      status: res.status,
+      ok: res.ok,
+      full: json,
+      record: json.record || null
+    };
   } catch (err) {
-    console.error('❌ Error al leer el bin:', err);
-    return null;
+    return {
+      status: 500,
+      ok: false,
+      error: err.message,
+      record: null
+    };
   }
 }
+
 
 /** WRITE */
 async function writeData(newData) {
@@ -69,23 +78,35 @@ export default async function handler(req, res) {
 
     // Validación básica
     if (!mode || !tlx || !tly || !pxx || !pxy) {
-      console.warn('⚠️ Parámetros faltantes:', { mode, tlx, tly, pxx, pxy });
       return res.status(400).json({ success: false, message: 'Missing parameters' });
     }
+
+    const response = await readData();
+    if (!response.ok || !response.record) {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to read bin data',
+        status: response.status,
+        full: response.full,
+        error: response.error || null
+      });
+    }
+    
+    const data = response.record;
 
     const tileKey = `${tlx}-${tly}`;
     const zoneKey = `${Math.floor(pxx / 250)}-${Math.floor(pxy / 250)}`;
 
-    const data = await readData();
+    //const data = await readData();
     if (!data || typeof data !== 'object') {
       console.error('❌ Data inválida o vacía');
       return res.status(500).json({ success: false, message: 'Failed to read bin data', MASTER_KEY: MASTER_KEY, BASE_URL: BASE_URL, data: data });
     }
 
-    console.log('📦 Data completa recibida:', data);
-    console.log('🔑 Claves disponibles:', Object.keys(data));
-    console.log('🔍 TileKey buscado:', tileKey);
-    console.log('🔍 ZoneKey buscado:', zoneKey);
+    // console.log('📦 Data completa recibida:', data);
+    // console.log('🔑 Claves disponibles:', Object.keys(data));
+    // console.log('🔍 TileKey buscado:', tileKey);
+    // console.log('🔍 ZoneKey buscado:', zoneKey);
 
     if (mode === 'read') {
       const tile = data[tileKey];

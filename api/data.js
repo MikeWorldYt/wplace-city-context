@@ -32,6 +32,7 @@ async function writeData(newData) {
       body: JSON.stringify(newData)
     });
     const json = await res.json();
+    console.log('📬 Respuesta del servidor:', json); // TESTING
     return json;
   } catch (err) {
     console.error('❌ Error al escribir en el bin:', err);
@@ -56,6 +57,7 @@ async function appendEntry(entry, tlx, tly) {
   if (!data[tileKey][sector]) data[tileKey][sector] = [];
 
   data[tileKey][sector].push(entry);
+  console.log('📤 Datos que se intentan guardar:', data); // TESTING
 
   return await writeData(data);
 }

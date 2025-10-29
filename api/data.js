@@ -71,15 +71,28 @@ export default async function handler(req, res) {
   if (mode === 'read') {
     const tileKey = `${tlx}-${tly}`;
     const zoneKey = `${Math.floor(pxx / 250)}-${Math.floor(pxy / 250)}`;
-
+    
     const data = await readData();
-    if (!data || !data[tileKey] || !data[tileKey][zoneKey]) {
-      return res.status(404).json({ success: false, message: 'No data found' });
+    if (!data || !data[tileKey]) {
+      return res.status(404).json({ success: false, message: 'Tile not found' });
     }
-
-    const entry = data[tileKey][zoneKey].find(e => e.px === parseInt(pxx) && e.py === parseInt(pxy));
-    return res.status(200).json({ success: true, result: entry || null });
+  
+    // 🔍 Aquí ves toda la zona antes de filtrar
+    console.log('🔍 Zona encontrada:', data[tileKey][zoneKey]);
+  
+    const zone = data[tileKey][zoneKey];
+    if (!zone) {
+      return res.status(404).json({ success: false, message: 'Zone not found' });
+    }
+  
+    // Si quieres devolver toda la zona:
+    return res.status(200).json({ success: true, zone });
+  
+    // Si quieres filtrar por coordenadas específicas:
+    // const entry = zone.find(e => e.px === parseInt(pxx) && e.py === parseInt(pxy));
+    // return res.status(200).json({ success: true, result: entry || null });
   }
+
 
   if (mode === 'write') {
     const entry = {

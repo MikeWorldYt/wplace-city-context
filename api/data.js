@@ -63,7 +63,7 @@ export default async function handler(req, res) {
   const BIN_ID = '690183fdd0ea881f40c3ddf8';
   const MASTER_KEY = process.env.JSONBIN_MASTER_KEY;
   const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-  console.log('🌐 Nuevo request recibido:', req.method, req.url);
+  
   try {
     const { mode, tlx, tly, pxx, pxy } = req.query;
 
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
     const data = await readData();
     if (!data || typeof data !== 'object') {
       console.error('❌ Data inválida o vacía');
-      return res.status(500).json({ success: false, message: 'Failed to read bin data' });
+      return res.status(500).json({ success: false, message: 'Failed to read bin data', MASTER_KEY: MASTER_KEY });
     }
 
     console.log('📦 Data completa recibida:', data);

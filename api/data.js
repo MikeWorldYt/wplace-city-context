@@ -63,6 +63,7 @@ export default async function handler(req, res) {
   const BIN_ID = '690183fdd0ea881f40c3ddf8';
   const MASTER_KEY = process.env.JSONBIN_MASTER_KEY;
   const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+  console.log('🌐 Nuevo request recibido:', req.method, req.url);
   try {
     const { mode, tlx, tly, pxx, pxy } = req.query;
 
@@ -120,6 +121,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, message: 'Invalid mode' });
   } catch (err) {
     console.error('❌ Error inesperado en handler:', err);
-    return res.status(500).json({ success: false, message: 'Internal Server Error', process.env.JSONBIN_MASTER_KEY });
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 }

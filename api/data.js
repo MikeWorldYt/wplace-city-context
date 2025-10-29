@@ -8,7 +8,12 @@ async function readData() {
     const res = await fetch(`${BASE_URL}/latest`, {
       headers: { 'X-Access-Key': MASTER_KEY }
     });
+    if (!res.ok) {
+      alert('❌ Error al leer el bin:', res.status, res.statusText);
+      return null;
+    }
     const json = await res.json();
+    alert('📥 Datos leídos del bin:', json.record);
     return json.record;
   } catch (err) {
     console.error('❌ Error al leer el bin:', err);

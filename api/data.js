@@ -1,4 +1,4 @@
-const BIN_ID = '690183fdd0ea881f40c3ddf8';
+const BIN_ID = '6902aa91ae596e708f36b5f7';
 const MASTER_KEY = process.env.JSONBIN_MASTER_KEY;
 const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
@@ -69,7 +69,7 @@ async function appendEntry(entry, tlx, tly) {
 
 /** API HANDLER */
 export default async function handler(req, res) {
-  const BIN_ID = '690183fdd0ea881f40c3ddf8';
+  const BIN_ID = '6902aa91ae596e708f36b5f7';
   const MASTER_KEY = process.env.JSONBIN_MASTER_KEY;
   const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
   

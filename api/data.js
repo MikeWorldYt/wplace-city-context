@@ -72,6 +72,10 @@ export default async function handler(req, res) {
   const BIN_ID = '6902aa91ae596e708f36b5f7';
   const MASTER_KEY = process.env.JSONBIN_MASTER_KEY;
   const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+  res.setHeader('Access-Control-Allow-Origin', 'https://wplace.live');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   
   try {
     const { mode, tlx, tly, pxx, pxy } = req.query;

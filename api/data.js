@@ -99,14 +99,8 @@ export default async function handler(req, res) {
 
     //const data = await readData();
     if (!data || typeof data !== 'object') {
-      console.error('❌ Data inválida o vacía');
-      return res.status(500).json({ success: false, message: 'Failed to read bin data', MASTER_KEY: MASTER_KEY, BASE_URL: BASE_URL, data: data });
+      return res.status(500).json({ success: false, message: 'Failed to read bin data', });
     }
-
-    // console.log('📦 Data completa recibida:', data);
-    // console.log('🔑 Claves disponibles:', Object.keys(data));
-    // console.log('🔍 TileKey buscado:', tileKey);
-    // console.log('🔍 ZoneKey buscado:', zoneKey);
 
     if (mode === 'read') {
       const tile = data[tileKey];
@@ -119,7 +113,13 @@ export default async function handler(req, res) {
         return res.status(404).json({ success: false, message: 'Zone not found' });
       }
 
-      return res.status(200).json({ success: true, zone });
+      return res.status(200).json({
+        success: true,
+        [tileKey]: {
+          [zoneKey]: zone
+        }
+      });
+
     }
 
     if (mode === 'write') {
@@ -141,7 +141,6 @@ export default async function handler(req, res) {
 
     return res.status(400).json({ success: false, message: 'Invalid mode' });
   } catch (err) {
-    console.error('❌ Error inesperado en handler:', err);
     return res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 }

@@ -122,6 +122,29 @@ export function initOverlay() {
     console.log('WCC:📍 Autolocation:', { ccTlx, ccTly, ccPxx, ccPxy });
   });
 
+  // Ask button functionality
+  document.getElementById('btnAsk')?.addEventListener('click', async () => {
+    const tlx = window.ccTlx;
+    const tly = window.ccTly;
+    const pxx = window.ccPxx;
+    const pxy = window.ccPxy;
+
+    if ([tlx, tly, pxx, pxy].some(v => typeof v !== 'number' || isNaN(v))) {
+      console.warn('WCC:❌ Coordenadas inválidas o no definidas.');
+      return;
+    }
+
+    const url = `https://wplace-city-context.vercel.app/api/data?mode=read&tlx=${tlx}&tly=${tly}&pxx=${pxx}&pxy=${pxy}`;
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      console.log('WCC:📬 Server Response:', data);
+    } catch (err) {
+      console.error('WCC:❌ Error:', err);
+    }
+  });
 
 
 

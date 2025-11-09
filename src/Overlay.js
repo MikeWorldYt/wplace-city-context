@@ -94,6 +94,42 @@ export function initOverlay() {
   });
 
   // Auto Location button functionality
+  function injectFetchHook() {
+    const script = document.createElement('script');
+    script.textContent = `
+      (() => {
+        const originalFetch = window.fetch;
+        window.fetch = async function(...args) {
+          const url = args[0];
+          const response = await originalFetch(...args);
+          const rawUrl = typeof args[0] === 'string' ? args[0] : args[0].url;
+          // ** Filter for pixel data requests ** //
+          if (typeof rawUrl === 'string' && rawUrl.includes('/pixel/')) {
+            try {
+              const pixelMatch = url.match(/pixel\\/(\\d+)\\/(\\d+)\\?x=(\\d+)&y=(\\d+)/);
+              if (pixelMatch) {
+                const [_, tlx, tly, pxx, pxy] = pixelMatch;
+                window.ccCoords = {
+                  tlx: parseInt(tlx),
+                  tly: parseInt(tly),
+                  pxx: parseInt(pxx),
+                  pxy: parseInt(pxy),
+                  timestamp: Date.now()
+                };
+                console.log('📍 WCC: Captured coordinates:', window.ccCoords);
+              }
+            } catch (err) {
+              console.warn('⚠ WCC: Error when capturing coordinates from fetch:', err);
+            }
+          }
+          return response;
+        };
+      })();
+    `;
+    document.documentElement.appendChild(script);
+  }
+  injectFetchHook()
+
   document.getElementById('btnLoc')?.addEventListener('click', () => {
     const span = document.querySelector('#bm-h');
     if (!span) {

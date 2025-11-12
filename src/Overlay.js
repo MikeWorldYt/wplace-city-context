@@ -152,27 +152,24 @@ export function initOverlay() {
 
   // Button - Autofill Location  functionality
   document.getElementById('btnLoc')?.addEventListener('click', () => {
-    const container = document.getElementById('cc-log');
-    if (!container) {
-      console.warn('⚠️ No coordinates found yet.');
-      return;
-    }
     // Extract coordinates from the container
-    const tlx = container.querySelector('#tlx')?.textContent;
-    const tly = container.querySelector('#tly')?.textContent;
-    const pxx = container.querySelector('#pxx')?.textContent;
-    const pxy = container.querySelector('#pxy')?.textContent;
+    const container = document.getElementById('cc-log');
+    const spans = container.querySelectorAll('span');
+    const coords = {};
+    spans.forEach(span => {
+      coords[span.id] = span.textContent;
+    });
     // Check if coordinates were extracted
-    if (!tlx || !tly || !pxx || !pxy) {
-      console.warn('⚠️ No coordinates found yet.');
+    if (coords.tlx === undefined) {
+      console.warn('⚠️ No Coordinates found yet.');
       return;
     }
     // Extracted coordinates
-    document.getElementById('b1').value = tlx;
-    document.getElementById('b2').value = tly;
-    document.getElementById('b3').value = pxx;
-    document.getElementById('b4').value = pxy;
-    console.log('📍 WCC: Coordetes filled:', { tlx, tly, pxx, pxy });
+    document.getElementById('b1').value = coords.tlx;
+    document.getElementById('b2').value = coords.tly;
+    document.getElementById('b3').value = coords.pxx;
+    document.getElementById('b4').value = coords.pxy;
+    console.log('📍 WCC: Coordinates filled:', coords);
   });
 
   // Ask button functionality

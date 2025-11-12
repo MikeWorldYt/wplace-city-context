@@ -150,32 +150,29 @@ export function initOverlay() {
   }
   injectFetchHook()
 
+  // Button - Autofill Location  functionality
   document.getElementById('btnLoc')?.addEventListener('click', () => {
-    const span = document.querySelector('#bm-h');
-    if (!span) {
-      console.warn('No se encontró el span con coordenadas.');
+    const container = document.getElementById('cc-log');
+    if (!container) {
+      console.warn('⚠️ No coordinates found yet.');
       return;
     }
-    // Extract coordinates from the text
-    const text = span.textContent;
-    const match = text.match(/Tl X:\s*(\d+),\s*Tl Y:\s*(\d+),\s*Px X:\s*(\d+),\s*Px Y:\s*(\d+)/);
+    // Extract coordinates from the container
+    const tlx = container.querySelector('#tlx')?.textContent;
+    const tly = container.querySelector('#tly')?.textContent;
+    const pxx = container.querySelector('#pxx')?.textContent;
+    const pxy = container.querySelector('#pxy')?.textContent;
     // Check if coordinates were extracted
-    if (!match) {
-      console.warn('No se pudieron extraer las coordenadas del texto.');
+    if (!tlx || !tly || !pxx || !pxy) {
+      console.warn('⚠️ No coordinates found yet.');
       return;
     }
     // Extracted coordinates
-    const [_, tlx, tly, pxx, pxy] = match;
     document.getElementById('b1').value = tlx;
     document.getElementById('b2').value = tly;
     document.getElementById('b3').value = pxx;
     document.getElementById('b4').value = pxy;
-    // Local variables for global use
-    window.ccTlx = parseInt(tlx);
-    window.ccTly = parseInt(tly);
-    window.ccPxx = parseInt(pxx);
-    window.ccPxy = parseInt(pxy);
-    console.log('WCC:📍 Autolocation:', { ccTlx, ccTly, ccPxx, ccPxy });
+    console.log('📍 WCC: Coordetes filled:', { tlx, tly, pxx, pxy });
   });
 
   // Ask button functionality

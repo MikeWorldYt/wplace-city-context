@@ -46,6 +46,8 @@ export function initOverlay() {
         <button id="info-node-delete-btn">Delete</button>
         <button id="info-node-close-btn">Close</button>
       </div>
+      <div id="cc-log">
+      </div>
     </div>
   `;
 
@@ -93,7 +95,7 @@ export function initOverlay() {
     }
   });
 
-  // Auto Location button functionality
+  // Hook - Intercept fetch requests from the page
   function injectFetchHook() {
     const script = document.createElement('script');
     script.textContent = `
@@ -109,6 +111,24 @@ export function initOverlay() {
               const pixelMatch = url.match(/pixel\\/(\\d+)\\/(\\d+)\\?x=(\\d+)&y=(\\d+)/);
               if (pixelMatch) {
                 const [_, tlx, tly, pxx, pxy] = pixelMatch;
+                let container = document.getElementById('cc-log');
+                if (!container) {
+                  container = document.createElement('div');
+                  container.id = 'cc-log';
+                  document.body.appendChild(container);
+                }
+                const coords = { tlx, tly, pxx, pxy };
+                for (const key in coords) {
+                  let span = container.querySelector('#' + key);
+                  if (!span) {
+                    span = document.createElement('span');
+                    span.id = key;
+                    container.appendChild(span);
+                  }
+                  span.textContent = coords[key];
+                }
+                // console.log('🧪 WCC: Updated cc-log with coordinates:', coords);
+                // ** Store in global variable (for other uses) ** //
                 window.ccCoords = {
                   tlx: parseInt(tlx),
                   tly: parseInt(tly),

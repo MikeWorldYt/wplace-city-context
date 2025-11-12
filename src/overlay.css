@@ -161,3 +161,12 @@
 .cc-info-node-buttons button:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+#cc-log {
+  display: none !important;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  position: absolute;
+}

@@ -1,4 +1,19 @@
 export function initOverlay() {
+  const siteCanvas = document.querySelector('#map');
+  const layers = document.createElement('div');
+  layers.id = 'cc-layers-overlay';
+  layers.className = 'h-screen w-screen';
+  
+  layers.innerHTML = `
+    <canvas id="layer-1" class="h-screen w-screen" style="position: absolute; pointer-events: none; z-index: 10;"></canvas>
+  `
+
+  siteCanvas.appendChild(layers);
+
+  const layer1 = document.getElementById('layer-1');
+  // layer1.width = layer1.offsetWidth;
+  // layer1.height = layer1.offsetHeight;
+
   const panel = document.createElement('div');
   panel.id = 'cc-wplace-panel';
 
@@ -105,6 +120,48 @@ export function initOverlay() {
           const url = args[0];
           const response = await originalFetch(...args);
           const rawUrl = typeof args[0] === 'string' ? args[0] : args[0].url;
+  
+          // ** Filter to watch Chunks ** //
+          CHUNK_WIDTH = 1000;
+          CHUNK_HEIGHT = 1000;
+          if (typeof rawUrl === 'string' && rawUrl.includes('/files/')) {
+            const m = rawUrl.match(/https?:\\/\\/[^\\/]+\\/files\\/(.+)/);
+            const getParts = m ? m[1] : null;
+            const parts = getParts.split('/');
+            const [chunkY, chunkX] = [parts.at(-2), parts.at(-1).split(".")[0]];
+            const canvas = new OffscreenCanvas(CHUNK_WIDTH, CHUNK_HEIGHT);
+            const ctx = canvas.getContext("2d", { willReadFrequently: true });
+            console.log('🧪 WCC: Intercepted Chunk:', { chunkY, chunkX });
+            if (chunkY !== undefined && chunkX !== undefined) {
+              // ** Copy to Overlay ** //
+              const layer1 = document.getElementById('layer-1');
+              layer1.width = layer1.offsetWidth;
+              layer1.height = layer1.offsetHeight;
+              const overlayCtx = layer1.getContext('2d');
+              // ** Chunk border
+              ctx.lineWidth = 1;
+              ctx.strokeStyle = 'red';
+              ctx.strokeRect(0, 0, CHUNK_WIDTH, CHUNK_HEIGHT);
+              // ** Chunk coords text
+              ctx.font = '30px Arial';
+              ctx.fillStyle = 'red';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(\`\${chunkY}, \${chunkX}\`, CHUNK_WIDTH / 2, CHUNK_HEIGHT / 2);
+              // ** Draw the chunk 
+              // const posX = parseInt(chunkX) % canvas.width;
+              // const posY = parseInt(chunkY) % canvas.height;
+              const posX = 10;
+              const posY = 10;
+              // overlayCtx.drawImage(canvas, posX, posY);
+              // ** remplace the chunk picture
+              const blob = await canvas.convertToBlob();
+              return new Response(blob, {
+                headers: { "Content-Type": "image/png" }
+              });
+            }
+          }
+
           // ** Filter for pixel data requests ** //
           if (typeof rawUrl === 'string' && rawUrl.includes('/pixel/')) {
             try {

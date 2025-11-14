@@ -144,7 +144,8 @@ export function initOverlay() {
               ctx.fillStyle = 'red';
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.fillText(\`\${chunkY}, \${chunkX}\`, CHUNK_WIDTH / 2, CHUNK_HEIGHT / 2);
+              ctx.fillText(`${chunkY}, ${chunkX}`, CHUNK_WIDTH / 2, CHUNK_HEIGHT / 2);
+
               // ** Draw the chunk 
               // const posX = parseInt(chunkX) % canvas.width;
               // const posY = parseInt(chunkY) % canvas.height;

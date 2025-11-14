@@ -229,20 +229,20 @@ export function initOverlay() {
     console.log('📍 WCC: Coordinates filled:', coords);
   });
 
-  // Ask button functionality
+  // Button - Ask Server functionality
   document.getElementById('btnAsk')?.addEventListener('click', async () => {
-    const tlx = window.ccTlx;
-    const tly = window.ccTly;
-    const pxx = window.ccPxx;
-    const pxy = window.ccPxy;
-
-    if ([tlx, tly, pxx, pxy].some(v => typeof v !== 'number' || isNaN(v))) {
-      console.warn('WCC:❌ Coordenadas inválidas o no definidas.');
+    const tlx = Number(document.getElementById('b1').value.trim());
+    const tly = Number(document.getElementById('b2').value.trim());
+    const pxx = Number(document.getElementById('b3').value.trim());
+    const pxy = Number(document.getElementById('b4').value.trim());
+    const coords = [tlx, tly, pxx, pxy];
+    if (coords.some(v => isNaN(v))) {
+      console.warn('WCC:❌ Invalid coordinates or not found.');
       return;
     }
-
+    // Server Resquest - Query
     const url = `https://wplace-city-context.vercel.app/api/data?mode=read&tlx=${tlx}&tly=${tly}&pxx=${pxx}&pxy=${pxy}`;
-
+    // Server Response - Data
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

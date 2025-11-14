@@ -248,6 +248,17 @@ export function initOverlay() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       console.log('WCC:📬 Server Response:', data);
+      // LocalStorage - Merge and Store data in localStorage
+      const key = `wcc-data`;
+      const zoneKey = `${tlx}-${tly}`;
+      const stored = localStorage.getItem(key);
+      const collection = stored ? JSON.parse(stored) : {};
+      collection[zoneKey] = {
+        ...(collection[zoneKey] || {}),
+        ...data[zoneKey]
+      }
+      localStorage.setItem(key, JSON.stringify(collection));
+      console.log('💾 WCC: Data merged and saved to localStorage:', collection);
     } catch (err) {
       console.error('WCC:❌ Error:', err);
     }

@@ -112,9 +112,6 @@ export function initOverlay() {
 
   // Hook - Intercept fetch requests from the page
   function injectFetchHook() {
-    const script = document.createElement('script');
-    script.textContent = `
-      (() => {
         const originalFetch = window.fetch;
         window.fetch = async function(...args) {
           const url = args[0];
@@ -125,7 +122,7 @@ export function initOverlay() {
           CHUNK_WIDTH = 1000;
           CHUNK_HEIGHT = 1000;
           if (typeof rawUrl === 'string' && rawUrl.includes('/files/')) {
-            const m = rawUrl.match(/https?:\\/\\/[^\\/]+\\/files\\/(.+)/);
+            const m = rawUrl.match(/https?:\/\/[^\/]+\/files\/(.+)/);
             const getParts = m ? m[1] : null;
             const parts = getParts.split('/');
             const [chunkY, chunkX] = [parts.at(-2), parts.at(-1).split(".")[0]];
@@ -165,7 +162,7 @@ export function initOverlay() {
           // ** Filter for pixel data requests ** //
           if (typeof rawUrl === 'string' && rawUrl.includes('/pixel/')) {
             try {
-              const pixelMatch = url.match(/pixel\\/(\\d+)\\/(\\d+)\\?x=(\\d+)&y=(\\d+)/);
+              const pixelMatch = url.match(/pixel\/(\d+)\/(\d+)\?x=(\d+)&y=(\d+)/);
               if (pixelMatch) {
                 const [_, tlx, tly, pxx, pxy] = pixelMatch;
                 let container = document.getElementById('cc-log');
@@ -201,11 +198,11 @@ export function initOverlay() {
           }
           return response;
         };
-      })();
-    `;
-    document.documentElement.appendChild(script);
   }
   injectFetchHook()
+  const script = document.createElement('script');
+  script.textContent = `(${injectFetchHook.toString()})();`;
+  document.documentElement.appendChild(script);
 
   // Button - Autofill Location  functionality
   document.getElementById('btnLoc')?.addEventListener('click', () => {

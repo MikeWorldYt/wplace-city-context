@@ -106,24 +106,17 @@ export default async function handler(req, res) {
       return res.status(500).json({ success: false, message: 'Failed to read bin data', });
     }
 
+    // *** *** *** READ MODE *** *** ***
     if (mode === 'read') {
       const tile = data[tileKey];
       if (!tile) {
         return res.status(404).json({ success: false, message: 'Tile not found' });
       }
-
-      const zone = tile[zoneKey];
-      if (!zone) {
-        return res.status(404).json({ success: false, message: 'Zone not found' });
-      }
-
+      // ** 200 - Get tile data
       return res.status(200).json({
         success: true,
-        [tileKey]: {
-          [zoneKey]: zone
-        }
+        [tileKey]: tile
       });
-
     }
 
     if (mode === 'write') {

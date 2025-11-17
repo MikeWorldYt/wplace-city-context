@@ -192,6 +192,9 @@ export function initOverlay() {
                   timestamp: Date.now()
                 };
                 console.log('📍 WCC: Captured coordinates:', window.ccCoords);
+                const stored = localStorage.getItem('wcc-data');
+                console.log('🔍 WCC: Curren LocalStorage:', JSON.parse(stored));
+                resolvePixelInfo(window.ccCoords);
               }
             } catch (err) {
               console.warn('⚠ WCC: Error when capturing coordinates from fetch:', err);
@@ -262,6 +265,32 @@ export function initOverlay() {
     }
   });
 
+  // Resolver Fill coordinates
+  function resolvePixelInfo(coords) {
+    console.log('🔍 WCC: Resolving pixel info for coordinates:', coords);
+    if (!coords) return;
+    const { tlx, tly, pxx, pxy } = coords;
+    const tileKey = `${tlx}-${tly}`;
+    const pxKey = `${pxx}-${pxy}`;
+    const stored = localStorage.getItem('wcc-data');
+    const titleSpan = document.querySelector('#cc-win-info-node .cc-info-node-title span');
+    const dateSpan = document.querySelector('#cc-win-info-node .cc-info-node-date span');
+    const commentSpan = document.querySelector('#cc-win-info-node .cc-info-node-comments span');
+    if (!stored) return;
+    try {
+      const data = JSON.parse(stored);
+      const found = data[tileKey]?.[pxKey];
+      console.log('WCC: Resolved pixel info:', found);
+      const resolved = Array.isArray(found) ? found[0] : found;
+      titleSpan.textContent = resolved ? (resolved.title || 'No data') : '';
+      dateSpan.textContent = resolved ? (resolved.date || 'xxxx-xx-xx') : '';
+      commentSpan.textContent = resolved ? (resolved.comment || 'No comment.') : 'No data.';
+      // Styles
+      titleSpan.style.color = titleSpan.textContent === 'Nothing selected!' ? '#b9b9b9' : '#fff';
+      commentSpan.style.color = commentSpan.textContent === 'No data.' ? '#b9b9b9' : '#fff';
+    } catch (err) {
+      console.warn('WCC: Failed to parse wcc-data', err);
+    }
 
+  }
 
-}

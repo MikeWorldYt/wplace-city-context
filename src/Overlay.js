@@ -248,12 +248,12 @@ export function initOverlay() {
       console.log('WCC:📬 Server Response:', data);
       // LocalStorage - Merge and Store data in localStorage
       const key = `wcc-data`;
-      const zoneKey = `${tlx}-${tly}`;
+      const tileKey = `${tlx}-${tly}`;
       const stored = localStorage.getItem(key);
       const collection = stored ? JSON.parse(stored) : {};
-      collection[zoneKey] = {
-        ...(collection[zoneKey] || {}),
-        ...data[zoneKey]
+      collection[tileKey] = {
+        ...(collection[tileKey] || {}),
+        ...data[tileKey]
       }
       localStorage.setItem(key, JSON.stringify(collection));
       console.log('💾 WCC: Data merged and saved to localStorage:', collection);

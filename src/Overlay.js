@@ -193,7 +193,6 @@ export function initOverlay() {
                 };
                 console.log('📍 WCC: Captured coordinates:', window.ccCoords);
                 const stored = localStorage.getItem('wcc-data');
-                console.log('🔍 WCC: Curren LocalStorage:', JSON.parse(stored));
                 resolvePixelInfo(window.ccCoords);
               }
             } catch (err) {
@@ -265,9 +264,8 @@ export function initOverlay() {
     }
   });
 
-  // Resolver Fill coordinates
+  // Resolver Fill coordinates in Panel
   function resolvePixelInfo(coords) {
-    console.log('🔍 WCC: Resolving pixel info for coordinates:', coords);
     if (!coords) return;
     const { tlx, tly, pxx, pxy } = coords;
     const tileKey = `${tlx}-${tly}`;
@@ -280,7 +278,7 @@ export function initOverlay() {
     try {
       const data = JSON.parse(stored);
       const found = data[tileKey]?.[pxKey];
-      console.log('WCC: Resolved pixel info:', found);
+      // console.log('WCC: Resolved pixel info:', found);
       const resolved = Array.isArray(found) ? found[0] : found;
       titleSpan.textContent = resolved ? (resolved.title || 'No data') : '';
       dateSpan.textContent = resolved ? (resolved.date || 'xxxx-xx-xx') : '';
